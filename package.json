@@ -11,6 +11,8 @@
   "dependencies": {
     "@headlessui/react": "^1.7.8",
     "@heroicons/react": "^2.0.14",
+    "axios": "^1.2.5",
+    "js-cookie": "^3.0.1",
     "next": "13.1.5",
     "react": "18.2.0",
     "react-dom": "18.2.0"
