@@ -51,6 +51,14 @@ function useProvideAuth() {
     //     //console.log(data.access_token);
     //     if(data.access_token){
     //         Cookie.set('token', data.access_token, { expires:5 } );
+    // const options = {
+    //     method: 'GET',
+    //     headers: {
+    //       authorization: `Bearer ${data.access_token}`,
+    //     },
+    //   };
+    //   const data = await fetch(endPoints.auth.profile, options).then((res) => res.json());
+
     //     }
     // };
 
