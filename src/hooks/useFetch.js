@@ -12,10 +12,11 @@ const useFetch = (endpoint) => {
   useEffect(() => {
     try {
       fetchData();
+      console.log(endpoint);
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  }, [endpoint]);
 
   return data;
 };
