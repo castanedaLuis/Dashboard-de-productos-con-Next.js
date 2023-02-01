@@ -1,37 +1,38 @@
-const people = [
-  {
-    name: 'Jane Cooper',
-    title: 'Regional Paradigm Technician',
-    department: 'Optimization',
-    role: 'Admin',
-    email: 'jane.cooper@example.com',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-  },
-];
-
-import { useState } from "react";
-import endPoints from "@services/api";
-import useFetch from "@hooks/useFetch";
-import Paginate from "@components/Paginate";
+import { useState } from 'react';
+import endPoints from '@services/api';
+import useFetch from '@hooks/useFetch';
+import Paginate from '@components/Paginate';
+import { Chart } from '@common/Chart';
 
 const PRODUCT_LIMIT = 5;
 const PRODUCT_OFFSET = 8;
 
 export default function Dashboard() {
-
   const [offsetProducts, setOffsetProducts] = useState(0);
-  const products = useFetch(endPoints.products.getProducts(PRODUCT_LIMIT, offsetProducts),offsetProducts);
+  const products = useFetch(endPoints.products.getProducts(PRODUCT_LIMIT, offsetProducts));
   const totalProducts = useFetch(endPoints.products.getProducts(0, 0)).length;
+
+  //Tablat de Chart
+  const categoryNames = products?.map((product) => product.category); //obtiene todas las categorias
+  const categoryCount = categoryNames?.map((category) => category.name); //Obtienen el nombre de cada una de las categorias
+
+  const countOccurrences = (arr) => arr.reduce((prev, curr) => ((prev[curr] = ++prev[curr] || 1), prev), {});
+
+  const data = {
+    datasets: [
+      {
+        label: 'Categories', //titulo
+        data: countOccurrences(categoryCount),//array de elementos
+        borderWidth: 2,
+        backgroundColor: ['#ffbb11', '#c0c0c0', '#50AF95', 'f3ba2f', '#2a71d0'], //array de los colores que utilizaremos
+      },
+    ],
+  };
 
   return (
     <>
-    {totalProducts > 0 && 
-      <Paginate 
-        totalItems={totalProducts} 
-        itemsPerPage={PRODUCT_LIMIT} 
-        setOffset={setOffsetProducts} 
-        neighbours={3}>
-        </Paginate>}
+      <Chart className="mb-8 mt-2" chartData={data} />
+      {totalProducts > 0 && <Paginate totalItems={totalProducts} itemsPerPage={PRODUCT_LIMIT} setOffset={setOffsetProducts} neighbours={3}></Paginate>}
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
