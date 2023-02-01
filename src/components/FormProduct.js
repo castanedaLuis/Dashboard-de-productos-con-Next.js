@@ -1,7 +1,27 @@
 import { useRef } from 'react';
 
+
 export default function FormProduct() {
   const formRef = useRef(null);
+
+  function checkData(data) {  // las REGEX se aplican sobre Strings (toString())
+    let pass = true;
+    if (!data.title.match(/\w{5,}/g)) {
+      alert('Title must be at least 5 characters');
+      pass = false;
+    } if (!(data.price).toString().match(/^[0-9]+$/g)) {
+      alert('Invalid price');
+      pass = false;
+    } if (!data.description.match(/\w{5,}/g)) {
+      alert('Description must be at least 5 characters');
+      pass = false;
+    } if (!data.images[0].match(/^.+\.(jpg|jpeg|png)$/g)) { //verifica la extensión
+      alert('Invalid file extension');
+      pass = false;
+    }
+
+    return pass;
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -13,7 +33,10 @@ export default function FormProduct() {
       categoryId: parseInt(formData.get('category')),
       images: [formData.get('images').name],
     };
-    console.log(data);
+    const passedCheck = checkData(data);
+    if(passedCheck){
+      console.log(data);
+    }
   };
 
   return (
