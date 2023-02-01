@@ -7,7 +7,7 @@ const Alert = ({ alert, handleClose }) => {
     }, 9000);
   }
 
-  const color = alert.type === 'success' ? 'green-100' : 'red-500';
+  const color = alert.type === 'success' ? 'green-100' : alert.type === 'error' ? 'red-100' :'indigo-100';
   return (
     <>
       {alert?.active && (
