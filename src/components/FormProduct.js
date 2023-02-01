@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { addProduct } from '@services/api/products';
 
 
 export default function FormProduct() {
@@ -36,6 +37,9 @@ export default function FormProduct() {
     const passedCheck = checkData(data);
     if(passedCheck){
       console.log(data);
+      addProduct(data).then( resp =>{
+        console.log(resp);
+      })
     }
   };
 
