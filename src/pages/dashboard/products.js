@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Head from 'next/head';
 import { CheckIcon, XCircleIcon } from '@heroicons/react/24/solid';
 import Modal from '@common/Modal';
 import FormProduct from '@components/FormProduct';
@@ -49,6 +50,9 @@ export default function products() {
 
   return (
     <>
+    <Head>
+      <title>Products</title>
+    </Head>
       <Alert alert={alert} handleClose={toggleAlert} />
       <div className="lg:flex lg:items-center lg:justify-between mb-8">
         <div className="flex-1 min-w-0">

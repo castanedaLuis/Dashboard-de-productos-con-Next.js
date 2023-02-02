@@ -4,7 +4,7 @@ export default function Nav() {
   const router = useRouter();
   const route = router.pathname.substring(1);
 
-  console.log(route);
+  
   return (
     <nav className={`bg-white shadow ${route === 'login' ?'flex justify-around ':''}`}>
       <div className={`max-w-7xl ${route === 'login' ?'':'mx-auto'} py-6 px-4 sm:px-6 lg:px-8`}>

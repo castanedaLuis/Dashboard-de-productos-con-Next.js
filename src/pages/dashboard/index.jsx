@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Head from 'next/head'
 import Link from 'next/link';
 import endPoints from '@services/api';
 import useFetch from '@hooks/useFetch';
@@ -55,6 +56,9 @@ export default function Dashboard() {
 
   return (
     <>
+        <Head>
+        <title>Dashboard</title>
+      </Head>
       <Chart className="mb-8 mt-2" chartData={data} />
       <Alert alert={alert} handleClose={toggleAlert} />
       {totalProducts > 0 && <Paginate totalItems={totalProducts} itemsPerPage={PRODUCT_LIMIT} setOffset={setOffsetProducts} neighbours={3}></Paginate>}
