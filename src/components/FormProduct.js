@@ -1,9 +1,11 @@
 import { useRef } from 'react';
-import { addProduct } from '@services/api/products';
+import { addProduct, updateProduct } from '@services/api/products';
+import { useRouter } from 'next/router'
 
 
 export default function FormProduct(props) {
   const formRef = useRef(null);
+  const router = useRouter();
 
   const { setOpen, setAlert, product } = props
 
@@ -37,26 +39,33 @@ export default function FormProduct(props) {
       images: [formData.get('images').name],
     };
     const passedCheck = checkData(data);
-    if(passedCheck){
-      console.log(data);
-      addProduct(data)
-      .then( () =>{
-          setAlert({
-          active: true,
-          message: 'Product added successfully',
-          type: 'success',
-          autoClose: false,
-        });
-        setOpen(false);
-      })
-      .catch((error) => {
-        setAlert({
-          active: true,
-          message: error.message,
-          type: 'error',
-          autoClose: false,
-        });
-      });
+    if (passedCheck) {
+      if (product) {
+        updateProduct(product.id, data)
+          .then(() => {
+            router.push('/dashboard/products/');
+          });
+      } else {
+        console.log(data);
+        addProduct(data)
+          .then(() => {
+            setAlert({
+              active: true,
+              message: 'Product added successfully',
+              type: 'success',
+              autoClose: false,
+            });
+            setOpen(false);
+          })
+          .catch((error) => {
+            setAlert({
+              active: true,
+              message: error.message,
+              type: 'error',
+              autoClose: false,
+            });
+          });
+      }
     }
   };
 
@@ -69,7 +78,7 @@ export default function FormProduct(props) {
               <label htmlFor="title" className="block text-sm font-medium text-gray-700">
                 Title
               </label>
-              <input  defaultValue={product?.title} type="text" name="title" id="title" className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+              <input defaultValue={product?.title} type="text" name="title" id="title" className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
             </div>
             <div className="col-span-6 sm:col-span-3">
               <label htmlFor="price" className="block text-sm font-medium text-gray-700">
@@ -101,7 +110,7 @@ export default function FormProduct(props) {
                 Description
               </label>
               <textarea
-              defaultValue={product?.description}
+                defaultValue={product?.description}
                 name="description"
                 id="description"
                 autoComplete="description"
