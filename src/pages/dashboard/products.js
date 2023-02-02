@@ -38,6 +38,7 @@ export default function products() {
     });
     })
   };
+  
   useEffect(() => {
     try {
       getProducts();

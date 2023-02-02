@@ -1,8 +1,12 @@
 import { useState } from 'react';
+import Link from 'next/link';
 import endPoints from '@services/api';
 import useFetch from '@hooks/useFetch';
 import Paginate from '@components/Paginate';
 import { Chart } from '@common/Chart';
+import useAlert from '@hooks/useAlert';
+import Alert from '@common/Alert';
+import { deleteProduct } from '@services/api/products';
 
 const PRODUCT_LIMIT = 5;
 const PRODUCT_OFFSET = 8;
@@ -11,6 +15,7 @@ export default function Dashboard() {
   const [offsetProducts, setOffsetProducts] = useState(0);
   const products = useFetch(endPoints.products.getProducts(PRODUCT_LIMIT, offsetProducts));
   const totalProducts = useFetch(endPoints.products.getProducts(0, 0)).length;
+  const { alert, setAlert, toggleAlert } = useAlert();
 
   //Tablat de Chart
   const categoryNames = products?.map((product) => product.category); //Con categoryNames se conoce cuántos elementos están dentro de las categorías
@@ -29,9 +34,29 @@ export default function Dashboard() {
     ],
   };
 
+  const handleDelete = (id) => {
+    deleteProduct(id).then(() => {
+      setAlert({
+        active: true,
+        message: 'Delete product successfully',
+        type: 'error',
+        autoClose: true,
+      });
+    })
+    .catch( (error) =>{
+      setAlert({
+        active: true,
+        message: error.message,
+        type: "error",
+        autoClose: false,
+    });
+    })
+  };
+
   return (
     <>
       <Chart className="mb-8 mt-2" chartData={data} />
+      <Alert alert={alert} handleClose={toggleAlert} />
       {totalProducts > 0 && <Paginate totalItems={totalProducts} itemsPerPage={PRODUCT_LIMIT} setOffset={setOffsetProducts} neighbours={3}></Paginate>}
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -81,14 +106,14 @@ export default function Dashboard() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.id}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                        <Link href={`/dashboard/edit/${product.id}`} className="text-indigo-600 hover:text-indigo-900">
                           Edit
-                        </a>
+                        </Link>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                        <button className="text-indigo-600 hover:text-indigo-900" onClick={() => handleDelete(product.id)} >
                           Delete
-                        </a>
+                        </button>
                       </td>
                     </tr>
                   ))}
